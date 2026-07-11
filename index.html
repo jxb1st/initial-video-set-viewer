@@ -1,0 +1,462 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Initial Video Set — Diverse Cross-Benchmark Sample</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--fg:#e6edf3;--mut:#8b949e;--acc:#58a6ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.55 -apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1400px;margin:0 auto;padding:26px 20px 80px}
+h1{font-size:24px;margin:0 0 4px} h2{font-size:17px;margin:26px 0 10px;color:var(--acc)}
+.sub{color:var(--mut);margin:0 0 18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#1c2330;color:var(--acc)}
+.dimgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.dim{background:#11161d;border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.dim b{color:var(--fg)} .dim .k{color:var(--acc);font-weight:600} .dim small{color:var(--mut)}
+.fgroup{margin:8px 0} .flabel{color:var(--mut);font-size:12px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.frow{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:#1c2330;border:1px solid var(--line);color:var(--fg);border-radius:14px;padding:4px 10px;cursor:pointer;font-size:12px}
+.chip .ct{color:var(--mut)} .chip.on{background:var(--acc);color:#04101f;border-color:var(--acc)}
+.chip.on .ct{color:#04101f}
+#search{background:#1c2330;border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:7px 10px;width:260px;margin-top:6px}
+#count{color:var(--mut);margin:10px 2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-top:6px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px;display:flex;flex-direction:column;gap:8px}
+.chead{display:flex;align-items:center;gap:8px} .sid{color:var(--mut);font-weight:700;font-size:12px}
+.act{font-weight:600}
+video{width:100%;border-radius:6px;background:#000;aspect-ratio:16/9}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:11px;padding:2px 7px;border-radius:10px;border:1px solid var(--line);background:#11161d;color:var(--mut)}
+.t-source{color:#7ee787;border-color:#2ea04326} .t-task{color:#79c0ff} .t-scale{color:#d2a8ff}
+.t-event{color:#04101f;background:#f0b72f;border-color:#f0b72f;font-weight:600}
+.prov{font-size:12px;color:var(--mut)} .prov b{color:var(--fg)}
+code{background:#11161d;border:1px solid var(--line);border-radius:4px;padding:1px 4px;font-size:11px}
+.path{word-break:break-all}
+</style></head><body><div class="wrap">
+<p style="margin:0 0 10px"><a href="https://jxb1st.github.io/datasets/" style="color:var(--acc);text-decoration:none">&larr; all datasets</a></p>
+<h1>Initial Video Set — Diverse Cross-Benchmark Sample</h1>
+<p class="sub">46 videos · 23+ distinct activity families · sampled from all 4 target benchmarks.
+Not cooking-only, not manipulation-only. Compressed 360p previews (HTTP-Range friendly for seeking).</p>
+
+<h2>How these videos were filtered / selected</h2>
+<div class="panel">
+<p>A <b>stratified sample</b> (not random): I defined a set of diversity dimensions, then picked videos to
+spread coverage across them. <b>Primary dimensions drive the quota</b>; secondary dimensions are recorded and
+used as balance checks. Sources with clean labels (Wearable-AI) were stratified directly from their metadata;
+sources with <b>no on-disk labels</b> (HowTo100M, EgoSchema) were tagged by a 1-frame Gemini-flash activity
+classification, then diversified. CaptainCook4D is 100% cooking, so it is <b>capped</b> (6 distinct recipes).</p>
+<div class="dimgrid">
+<div class="dim"><span class="k">A · Source benchmark</span><br><small>Mix all 4 targets; no dataset dominates.</small></div>
+<div class="dim"><span class="k">B · Event / scenario type</span><br><small>The anti-"only cooking / only manipulation" axis: procedural-task · instructional-demo · excursion-travel · sport-performance · <b>social-event</b> · shopping-errand · daily-routine. Every bucket has a floor of coverage.</small></div>
+<div class="dim"><span class="k">C · Task / interaction form</span><br><small>proactive-assist / conversational-QA / long-MCQ / procedural-manipulation / instructional-tutorial / unconstrained-egocentric.</small></div>
+<div class="dim"><span class="k">D · Temporal scale</span><br><small>short &lt;100s · medium 100–250s · long &gt;250s (16s→820s).</small></div>
+<div class="dim"><span class="k">E · Viewpoint <small>(secondary)</small></span><br><small>egocentric vs exocentric.</small></div>
+<div class="dim"><span class="k">F · Environment <small>(secondary)</small></span><br><small>indoor-stationary vs outdoor-locomotion (heuristic).</small></div>
+<div class="dim"><span class="k">G · Interaction intensity <small>(secondary)</small></span><br><small>high hand-object manipulation vs low/observational (heuristic).</small></div>
+</div></div>
+
+<h2>Source videos: where each one comes from</h2>
+<div class="panel"><table>
+<tr><th>Source</th><th>#</th><th>Paper / origin</th><th>What the source video is</th></tr>
+<tr><td><b>Wearable-AI (Meta)</b></td><td>30</td><td>Wearable AI Workshop @ ECCV 2026 — dataset facebook/wearable-ai</td><td>Egocentric head-mounted wearable-camera recordings of everyday activities (Meta-collected; 1080p, audio-stripped, face-blurred). Val-only benchmark, 700 videos/task.</td></tr><tr><td><b>CaptainCook4D</b></td><td>6</td><td>CaptainCook4D (NeurIPS 2024 D&amp;B) — errors in procedural cooking</td><td>Egocentric (GoPro) cooking sessions of full recipes with fine-grained step + error annotations. We reuse the 10 videos already captioned in our v6 pipeline.</td></tr><tr><td><b>HowTo100M</b></td><td>5</td><td>HowTo100M (ICCV 2019) — narrated instructional web videos</td><td>Exocentric third-person instructional YouTube videos (how-to tutorials). No activity labels on disk — tagged here by a 1-frame Gemini-flash classification.</td></tr><tr><td><b>EgoSchema</b></td><td>5</td><td>EgoSchema (NeurIPS 2023) — long-form egocentric video QA (sourced from Ego4D)</td><td>Egocentric ~3-min clips of unconstrained daily activity (from Ego4D). No activity labels on disk — tagged here by a 1-frame Gemini-flash classification.</td></tr>
+</table></div>
+
+<h2>Browse the set (46 videos)</h2>
+<div class="panel">
+<div class="fgroup"><div class="flabel">A · Source benchmark</div><div class="frow"><button class="chip" data-k="source" data-v="wearable-ai">wearable-ai <span class="ct">30</span></button><button class="chip" data-k="source" data-v="captaincook4d">captaincook4d <span class="ct">6</span></button><button class="chip" data-k="source" data-v="howto100m">howto100m <span class="ct">5</span></button><button class="chip" data-k="source" data-v="egoschema">egoschema <span class="ct">5</span></button></div></div><div class="fgroup"><div class="flabel">B · Event / scenario type</div><div class="frow"><button class="chip" data-k="event_type" data-v="procedural-task">procedural-task <span class="ct">23</span></button><button class="chip" data-k="event_type" data-v="instructional-demo">instructional-demo <span class="ct">6</span></button><button class="chip" data-k="event_type" data-v="excursion-travel">excursion-travel <span class="ct">5</span></button><button class="chip" data-k="event_type" data-v="daily-routine">daily-routine <span class="ct">4</span></button><button class="chip" data-k="event_type" data-v="sport-performance">sport-performance <span class="ct">3</span></button><button class="chip" data-k="event_type" data-v="social-event">social-event <span class="ct">3</span></button><button class="chip" data-k="event_type" data-v="shopping-errand">shopping-errand <span class="ct">2</span></button></div></div><div class="fgroup"><div class="flabel">C · Task / interaction form</div><div class="frow"><button class="chip" data-k="task_form" data-v="proactive-assist">proactive-assist <span class="ct">10</span></button><button class="chip" data-k="task_form" data-v="conversational-QA">conversational-QA <span class="ct">10</span></button><button class="chip" data-k="task_form" data-v="long-MCQ">long-MCQ <span class="ct">10</span></button><button class="chip" data-k="task_form" data-v="procedural-manipulation">procedural-manipulation <span class="ct">6</span></button><button class="chip" data-k="task_form" data-v="instructional-tutorial">instructional-tutorial <span class="ct">5</span></button><button class="chip" data-k="task_form" data-v="unconstrained-egocentric">unconstrained-egocentric <span class="ct">5</span></button></div></div><div class="fgroup"><div class="flabel">D · Temporal scale</div><div class="frow"><button class="chip" data-k="temporal_scale" data-v="long">long <span class="ct">23</span></button><button class="chip" data-k="temporal_scale" data-v="medium">medium <span class="ct">15</span></button><button class="chip" data-k="temporal_scale" data-v="short">short <span class="ct">8</span></button></div></div><div class="fgroup"><div class="flabel">E · Viewpoint</div><div class="frow"><button class="chip" data-k="viewpoint" data-v="egocentric">egocentric <span class="ct">41</span></button><button class="chip" data-k="viewpoint" data-v="exocentric">exocentric <span class="ct">5</span></button></div></div><div class="fgroup"><div class="flabel">F · Environment</div><div class="frow"><button class="chip" data-k="environment" data-v="indoor/stationary">indoor/stationary <span class="ct">35</span></button><button class="chip" data-k="environment" data-v="outdoor/locomotion">outdoor/locomotion <span class="ct">11</span></button></div></div><div class="fgroup"><div class="flabel">G · Interaction intensity</div><div class="frow"><button class="chip" data-k="interaction" data-v="high-manipulation">high-manipulation <span class="ct">26</span></button><button class="chip" data-k="interaction" data-v="low/observational">low/observational <span class="ct">20</span></button></div></div>
+<input id="search" placeholder="search activity / source / id…">
+</div>
+<div id="count"></div>
+<div class="grid" id="grid"><div class="card" data-source="wearable-ai" data-event_type="procedural-task" data-task_form="proactive-assist" data-temporal_scale="short" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="chef wearable-ai (meta) f9ab736efee50387">
+      <div class="chead"><span class="sid">#00</span>
+        <span class="act">Chef</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__f9ab736efee50387.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">proactive-assist</span><span class="tag t-scale">short</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoProactive — proactive-assistant, decide when/what to say over streaming video<br>
+        <b>Original id:</b> <code>f9ab736efee50387</code> · 80s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoproactive/val/f9ab736efee50387.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="procedural-task" data-task_form="proactive-assist" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="chef wearable-ai (meta) 9bee20d4cc3565da">
+      <div class="chead"><span class="sid">#01</span>
+        <span class="act">Chef</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__9bee20d4cc3565da.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">proactive-assist</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoProactive — proactive-assistant, decide when/what to say over streaming video<br>
+        <b>Original id:</b> <code>9bee20d4cc3565da</code> · 100s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoproactive/val/9bee20d4cc3565da.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="procedural-task" data-task_form="proactive-assist" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="chef wearable-ai (meta) 440660c9d220f05f">
+      <div class="chead"><span class="sid">#02</span>
+        <span class="act">Chef</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__440660c9d220f05f.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">proactive-assist</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoProactive — proactive-assistant, decide when/what to say over streaming video<br>
+        <b>Original id:</b> <code>440660c9d220f05f</code> · 251s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoproactive/val/440660c9d220f05f.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="procedural-task" data-task_form="proactive-assist" data-temporal_scale="short" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="arts and crafts wearable-ai (meta) a5281e906025a240">
+      <div class="chead"><span class="sid">#03</span>
+        <span class="act">Arts and Crafts</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__a5281e906025a240.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">proactive-assist</span><span class="tag t-scale">short</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoProactive — proactive-assistant, decide when/what to say over streaming video<br>
+        <b>Original id:</b> <code>a5281e906025a240</code> · 16s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoproactive/val/a5281e906025a240.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="procedural-task" data-task_form="proactive-assist" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="arts and crafts wearable-ai (meta) 94e4220d406c1cca">
+      <div class="chead"><span class="sid">#04</span>
+        <span class="act">Arts and Crafts</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__94e4220d406c1cca.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">proactive-assist</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoProactive — proactive-assistant, decide when/what to say over streaming video<br>
+        <b>Original id:</b> <code>94e4220d406c1cca</code> · 103s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoproactive/val/94e4220d406c1cca.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="procedural-task" data-task_form="proactive-assist" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="handyman wearable-ai (meta) e154915e636fc23f">
+      <div class="chead"><span class="sid">#05</span>
+        <span class="act">Handyman</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__e154915e636fc23f.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">proactive-assist</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoProactive — proactive-assistant, decide when/what to say over streaming video<br>
+        <b>Original id:</b> <code>e154915e636fc23f</code> · 266s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoproactive/val/e154915e636fc23f.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="procedural-task" data-task_form="proactive-assist" data-temporal_scale="short" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="handyman wearable-ai (meta) b00c7a882446587f">
+      <div class="chead"><span class="sid">#06</span>
+        <span class="act">Handyman</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__b00c7a882446587f.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">proactive-assist</span><span class="tag t-scale">short</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoProactive — proactive-assistant, decide when/what to say over streaming video<br>
+        <b>Original id:</b> <code>b00c7a882446587f</code> · 46s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoproactive/val/b00c7a882446587f.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="instructional-demo" data-task_form="proactive-assist" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="low/observational" data-text="tutorial wearable-ai (meta) 49b376b461bb8876">
+      <div class="chead"><span class="sid">#07</span>
+        <span class="act">Tutorial</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__49b376b461bb8876.mp4"></video>
+      <div class="tags"><span class="tag t-event">instructional-demo</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">proactive-assist</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoProactive — proactive-assistant, decide when/what to say over streaming video<br>
+        <b>Original id:</b> <code>49b376b461bb8876</code> · 100s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoproactive/val/49b376b461bb8876.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="instructional-demo" data-task_form="proactive-assist" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="low/observational" data-text="tutorial wearable-ai (meta) 6ce4e634e6294692">
+      <div class="chead"><span class="sid">#08</span>
+        <span class="act">Tutorial</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__6ce4e634e6294692.mp4"></video>
+      <div class="tags"><span class="tag t-event">instructional-demo</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">proactive-assist</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoProactive — proactive-assistant, decide when/what to say over streaming video<br>
+        <b>Original id:</b> <code>6ce4e634e6294692</code> · 256s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoproactive/val/6ce4e634e6294692.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="instructional-demo" data-task_form="proactive-assist" data-temporal_scale="short" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="low/observational" data-text="tutorial wearable-ai (meta) cc4ac34272e4c3e4">
+      <div class="chead"><span class="sid">#09</span>
+        <span class="act">Tutorial</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__cc4ac34272e4c3e4.mp4"></video>
+      <div class="tags"><span class="tag t-event">instructional-demo</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">proactive-assist</span><span class="tag t-scale">short</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoProactive — proactive-assistant, decide when/what to say over streaming video<br>
+        <b>Original id:</b> <code>cc4ac34272e4c3e4</code> · 29s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoproactive/val/cc4ac34272e4c3e4.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="procedural-task" data-task_form="conversational-QA" data-temporal_scale="short" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="cooking wearable-ai (meta) 4cdb8d625619386f">
+      <div class="chead"><span class="sid">#10</span>
+        <span class="act">Cooking</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__4cdb8d625619386f.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">conversational-QA</span><span class="tag t-scale">short</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoConv — multi-turn conversational QA grounded in the video<br>
+        <b>Original id:</b> <code>4cdb8d625619386f</code> · 81s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoconv/val/4cdb8d625619386f.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="excursion-travel" data-task_form="conversational-QA" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="outdoor/locomotion" data-interaction="low/observational" data-text="sightseeing wearable-ai (meta) 89da98922957d8ff">
+      <div class="chead"><span class="sid">#11</span>
+        <span class="act">Sightseeing</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__89da98922957d8ff.mp4"></video>
+      <div class="tags"><span class="tag t-event">excursion-travel</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">conversational-QA</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">outdoor/locomotion</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoConv — multi-turn conversational QA grounded in the video<br>
+        <b>Original id:</b> <code>89da98922957d8ff</code> · 103s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoconv/val/89da98922957d8ff.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="excursion-travel" data-task_form="conversational-QA" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="outdoor/locomotion" data-interaction="low/observational" data-text="tourism wearable-ai (meta) 0bdbf1f4696f054f">
+      <div class="chead"><span class="sid">#12</span>
+        <span class="act">Tourism</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__0bdbf1f4696f054f.mp4"></video>
+      <div class="tags"><span class="tag t-event">excursion-travel</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">conversational-QA</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">outdoor/locomotion</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoConv — multi-turn conversational QA grounded in the video<br>
+        <b>Original id:</b> <code>0bdbf1f4696f054f</code> · 254s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoconv/val/0bdbf1f4696f054f.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="shopping-errand" data-task_form="conversational-QA" data-temporal_scale="short" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="low/observational" data-text="shopping wearable-ai (meta) 6de3fc66543533fa">
+      <div class="chead"><span class="sid">#13</span>
+        <span class="act">Shopping</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__6de3fc66543533fa.mp4"></video>
+      <div class="tags"><span class="tag t-event">shopping-errand</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">conversational-QA</span><span class="tag t-scale">short</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoConv — multi-turn conversational QA grounded in the video<br>
+        <b>Original id:</b> <code>6de3fc66543533fa</code> · 42s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoconv/val/6de3fc66543533fa.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="daily-routine" data-task_form="conversational-QA" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="low/observational" data-text="dailyactivities wearable-ai (meta) 13b5a5f93d33d93a">
+      <div class="chead"><span class="sid">#14</span>
+        <span class="act">DailyActivities</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__13b5a5f93d33d93a.mp4"></video>
+      <div class="tags"><span class="tag t-event">daily-routine</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">conversational-QA</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoConv — multi-turn conversational QA grounded in the video<br>
+        <b>Original id:</b> <code>13b5a5f93d33d93a</code> · 101s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoconv/val/13b5a5f93d33d93a.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="sport-performance" data-task_form="conversational-QA" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="outdoor/locomotion" data-interaction="low/observational" data-text="sports wearable-ai (meta) 84bdfd2003c046f1">
+      <div class="chead"><span class="sid">#15</span>
+        <span class="act">Sports</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__84bdfd2003c046f1.mp4"></video>
+      <div class="tags"><span class="tag t-event">sport-performance</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">conversational-QA</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">outdoor/locomotion</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoConv — multi-turn conversational QA grounded in the video<br>
+        <b>Original id:</b> <code>84bdfd2003c046f1</code> · 279s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoconv/val/84bdfd2003c046f1.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="sport-performance" data-task_form="conversational-QA" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="outdoor/locomotion" data-interaction="low/observational" data-text="danceexercise wearable-ai (meta) 1b6e3fb5b4f5bf9a">
+      <div class="chead"><span class="sid">#16</span>
+        <span class="act">DanceExercise</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__1b6e3fb5b4f5bf9a.mp4"></video>
+      <div class="tags"><span class="tag t-event">sport-performance</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">conversational-QA</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">outdoor/locomotion</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoConv — multi-turn conversational QA grounded in the video<br>
+        <b>Original id:</b> <code>1b6e3fb5b4f5bf9a</code> · 108s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoconv/val/1b6e3fb5b4f5bf9a.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="procedural-task" data-task_form="conversational-QA" data-temporal_scale="short" data-viewpoint="egocentric" data-environment="outdoor/locomotion" data-interaction="high-manipulation" data-text="gardening wearable-ai (meta) dcea581593204193">
+      <div class="chead"><span class="sid">#17</span>
+        <span class="act">Gardening</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__dcea581593204193.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">conversational-QA</span><span class="tag t-scale">short</span><span class="tag t-view">egocentric</span><span class="tag t-env">outdoor/locomotion</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoConv — multi-turn conversational QA grounded in the video<br>
+        <b>Original id:</b> <code>dcea581593204193</code> · 71s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoconv/val/dcea581593204193.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="social-event" data-task_form="conversational-QA" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="low/observational" data-text="events wearable-ai (meta) f23251d3b9037aec">
+      <div class="chead"><span class="sid">#18</span>
+        <span class="act">Events</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__f23251d3b9037aec.mp4"></video>
+      <div class="tags"><span class="tag t-event">social-event</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">conversational-QA</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoConv — multi-turn conversational QA grounded in the video<br>
+        <b>Original id:</b> <code>f23251d3b9037aec</code> · 259s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoconv/val/f23251d3b9037aec.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="procedural-task" data-task_form="conversational-QA" data-temporal_scale="short" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="hobbies wearable-ai (meta) 1e719746365c0af7">
+      <div class="chead"><span class="sid">#19</span>
+        <span class="act">Hobbies</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__1e719746365c0af7.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">conversational-QA</span><span class="tag t-scale">short</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoConv — multi-turn conversational QA grounded in the video<br>
+        <b>Original id:</b> <code>1e719746365c0af7</code> · 82s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egoconv/val/1e719746365c0af7.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="daily-routine" data-task_form="long-MCQ" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="low/observational" data-text="daily activities wearable-ai (meta) 1f2fa2af1378221e">
+      <div class="chead"><span class="sid">#20</span>
+        <span class="act">Daily Activities</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__1f2fa2af1378221e.mp4"></video>
+      <div class="tags"><span class="tag t-event">daily-routine</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">long-MCQ</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoLongQA — long-form 4-way multiple-choice QA over a single long clip<br>
+        <b>Original id:</b> <code>1f2fa2af1378221e</code> · 131s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egolongqa/val/1f2fa2af1378221e.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="excursion-travel" data-task_form="long-MCQ" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="outdoor/locomotion" data-interaction="low/observational" data-text="sightseeing wearable-ai (meta) b76d10dcd8243a01">
+      <div class="chead"><span class="sid">#21</span>
+        <span class="act">Sightseeing</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__b76d10dcd8243a01.mp4"></video>
+      <div class="tags"><span class="tag t-event">excursion-travel</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">long-MCQ</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">outdoor/locomotion</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoLongQA — long-form 4-way multiple-choice QA over a single long clip<br>
+        <b>Original id:</b> <code>b76d10dcd8243a01</code> · 558s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egolongqa/val/b76d10dcd8243a01.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="excursion-travel" data-task_form="long-MCQ" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="outdoor/locomotion" data-interaction="low/observational" data-text="travel-tourism wearable-ai (meta) a74d09fd1a2a1ab6">
+      <div class="chead"><span class="sid">#22</span>
+        <span class="act">Travel-Tourism</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__a74d09fd1a2a1ab6.mp4"></video>
+      <div class="tags"><span class="tag t-event">excursion-travel</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">long-MCQ</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">outdoor/locomotion</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoLongQA — long-form 4-way multiple-choice QA over a single long clip<br>
+        <b>Original id:</b> <code>a74d09fd1a2a1ab6</code> · 581s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egolongqa/val/a74d09fd1a2a1ab6.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="shopping-errand" data-task_form="long-MCQ" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="low/observational" data-text="shopping wearable-ai (meta) 777459a083922176">
+      <div class="chead"><span class="sid">#23</span>
+        <span class="act">Shopping</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__777459a083922176.mp4"></video>
+      <div class="tags"><span class="tag t-event">shopping-errand</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">long-MCQ</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoLongQA — long-form 4-way multiple-choice QA over a single long clip<br>
+        <b>Original id:</b> <code>777459a083922176</code> · 589s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egolongqa/val/777459a083922176.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="excursion-travel" data-task_form="long-MCQ" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="outdoor/locomotion" data-interaction="low/observational" data-text="hiking-outdoors wearable-ai (meta) aba90d4060290a87">
+      <div class="chead"><span class="sid">#24</span>
+        <span class="act">Hiking-Outdoors</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__aba90d4060290a87.mp4"></video>
+      <div class="tags"><span class="tag t-event">excursion-travel</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">long-MCQ</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">outdoor/locomotion</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoLongQA — long-form 4-way multiple-choice QA over a single long clip<br>
+        <b>Original id:</b> <code>aba90d4060290a87</code> · 598s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egolongqa/val/aba90d4060290a87.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="procedural-task" data-task_form="long-MCQ" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="outdoor/locomotion" data-interaction="high-manipulation" data-text="gardening wearable-ai (meta) ef75ac3d92198596">
+      <div class="chead"><span class="sid">#25</span>
+        <span class="act">Gardening</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__ef75ac3d92198596.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">long-MCQ</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">outdoor/locomotion</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoLongQA — long-form 4-way multiple-choice QA over a single long clip<br>
+        <b>Original id:</b> <code>ef75ac3d92198596</code> · 600s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egolongqa/val/ef75ac3d92198596.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="social-event" data-task_form="long-MCQ" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="outdoor/locomotion" data-interaction="low/observational" data-text="pets, social gatherings with friends and family wearable-ai (meta) ef51015464812b8c">
+      <div class="chead"><span class="sid">#26</span>
+        <span class="act">Pets, social gatherings with friends and family</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__ef51015464812b8c.mp4"></video>
+      <div class="tags"><span class="tag t-event">social-event</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">long-MCQ</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">outdoor/locomotion</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoLongQA — long-form 4-way multiple-choice QA over a single long clip<br>
+        <b>Original id:</b> <code>ef51015464812b8c</code> · 555s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egolongqa/val/ef51015464812b8c.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="sport-performance" data-task_form="long-MCQ" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="outdoor/locomotion" data-interaction="low/observational" data-text="outdoor activities and sports wearable-ai (meta) 7c8b228dd61b135f">
+      <div class="chead"><span class="sid">#27</span>
+        <span class="act">Outdoor Activities and Sports</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__7c8b228dd61b135f.mp4"></video>
+      <div class="tags"><span class="tag t-event">sport-performance</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">long-MCQ</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">outdoor/locomotion</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoLongQA — long-form 4-way multiple-choice QA over a single long clip<br>
+        <b>Original id:</b> <code>7c8b228dd61b135f</code> · 600s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egolongqa/val/7c8b228dd61b135f.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="daily-routine" data-task_form="long-MCQ" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="low/observational" data-text="fashion advice wearable-ai (meta) 5e1ba77a7f73c84d">
+      <div class="chead"><span class="sid">#28</span>
+        <span class="act">Fashion Advice</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__5e1ba77a7f73c84d.mp4"></video>
+      <div class="tags"><span class="tag t-event">daily-routine</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">long-MCQ</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoLongQA — long-form 4-way multiple-choice QA over a single long clip<br>
+        <b>Original id:</b> <code>5e1ba77a7f73c84d</code> · 600s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egolongqa/val/5e1ba77a7f73c84d.mp4</code></div>
+    </div><div class="card" data-source="wearable-ai" data-event_type="social-event" data-task_form="long-MCQ" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="low/observational" data-text="events wearable-ai (meta) 8812f05ea4220629">
+      <div class="chead"><span class="sid">#29</span>
+        <span class="act">Events</span></div>
+      <video controls preload="none" playsinline src="videos/wearable-ai__8812f05ea4220629.mp4"></video>
+      <div class="tags"><span class="tag t-event">social-event</span><span class="tag t-source">wearable-ai</span><span class="tag t-task">long-MCQ</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> Wearable-AI (Meta) — EgoLongQA — long-form 4-way multiple-choice QA over a single long clip<br>
+        <b>Original id:</b> <code>8812f05ea4220629</code> · 589s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/wearable-ai/egolongqa/val/8812f05ea4220629.mp4</code></div>
+    </div><div class="card" data-source="captaincook4d" data-event_type="procedural-task" data-task_form="procedural-manipulation" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="cooking (cooking) captaincook4d 10_6">
+      <div class="chead"><span class="sid">#30</span>
+        <span class="act">Cooking (Cooking)</span></div>
+      <video controls preload="none" playsinline src="videos/captaincook4d__10_6.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">captaincook4d</span><span class="tag t-task">procedural-manipulation</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> CaptainCook4D — One full recipe execution per video (distinct recipe IDs)<br>
+        <b>Original id:</b> <code>10_6</code> · 328s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/captaincook4d_videos/360p/10_6.mp4</code></div>
+    </div><div class="card" data-source="captaincook4d" data-event_type="procedural-task" data-task_form="procedural-manipulation" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="cooking (cooking) captaincook4d 12_2">
+      <div class="chead"><span class="sid">#31</span>
+        <span class="act">Cooking (Cooking)</span></div>
+      <video controls preload="none" playsinline src="videos/captaincook4d__12_2.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">captaincook4d</span><span class="tag t-task">procedural-manipulation</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> CaptainCook4D — One full recipe execution per video (distinct recipe IDs)<br>
+        <b>Original id:</b> <code>12_2</code> · 429s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/captaincook4d_videos/360p/12_2.mp4</code></div>
+    </div><div class="card" data-source="captaincook4d" data-event_type="procedural-task" data-task_form="procedural-manipulation" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="cooking (cooking) captaincook4d 7_1">
+      <div class="chead"><span class="sid">#32</span>
+        <span class="act">Cooking (Cooking)</span></div>
+      <video controls preload="none" playsinline src="videos/captaincook4d__7_1.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">captaincook4d</span><span class="tag t-task">procedural-manipulation</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> CaptainCook4D — One full recipe execution per video (distinct recipe IDs)<br>
+        <b>Original id:</b> <code>7_1</code> · 541s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/captaincook4d_videos/360p/7_1.mp4</code></div>
+    </div><div class="card" data-source="captaincook4d" data-event_type="procedural-task" data-task_form="procedural-manipulation" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="cooking (cleaning &amp; chores) captaincook4d 3_2">
+      <div class="chead"><span class="sid">#33</span>
+        <span class="act">Cooking (Cleaning &amp; Chores)</span></div>
+      <video controls preload="none" playsinline src="videos/captaincook4d__3_2.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">captaincook4d</span><span class="tag t-task">procedural-manipulation</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> CaptainCook4D — One full recipe execution per video (distinct recipe IDs)<br>
+        <b>Original id:</b> <code>3_2</code> · 658s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/captaincook4d_videos/360p/3_2.mp4</code></div>
+    </div><div class="card" data-source="captaincook4d" data-event_type="procedural-task" data-task_form="procedural-manipulation" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="cooking (cooking) captaincook4d 4_2">
+      <div class="chead"><span class="sid">#34</span>
+        <span class="act">Cooking (Cooking)</span></div>
+      <video controls preload="none" playsinline src="videos/captaincook4d__4_2.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">captaincook4d</span><span class="tag t-task">procedural-manipulation</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> CaptainCook4D — One full recipe execution per video (distinct recipe IDs)<br>
+        <b>Original id:</b> <code>4_2</code> · 775s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/captaincook4d_videos/360p/4_2.mp4</code></div>
+    </div><div class="card" data-source="captaincook4d" data-event_type="procedural-task" data-task_form="procedural-manipulation" data-temporal_scale="long" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="cooking (cleaning &amp; chores) captaincook4d 5_2">
+      <div class="chead"><span class="sid">#35</span>
+        <span class="act">Cooking (Cleaning &amp; Chores)</span></div>
+      <video controls preload="none" playsinline src="videos/captaincook4d__5_2.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">captaincook4d</span><span class="tag t-task">procedural-manipulation</span><span class="tag t-scale">long</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> CaptainCook4D — One full recipe execution per video (distinct recipe IDs)<br>
+        <b>Original id:</b> <code>5_2</code> · 820s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/captaincook4d_videos/360p/5_2.mp4</code></div>
+    </div><div class="card" data-source="howto100m" data-event_type="procedural-task" data-task_form="instructional-tutorial" data-temporal_scale="long" data-viewpoint="exocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="arts &amp; crafts howto100m z-37onnzps4">
+      <div class="chead"><span class="sid">#36</span>
+        <span class="act">Arts &amp; Crafts</span></div>
+      <video controls preload="none" playsinline src="videos/howto100m__Z-37OnNZpS4.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">howto100m</span><span class="tag t-task">instructional-tutorial</span><span class="tag t-scale">long</span><span class="tag t-view">exocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> HowTo100M — Instructional tutorial clip<br>
+        <b>Original id:</b> <code>Z-37OnNZpS4</code> · 261s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/howto100m_egoschema_temp_data/howto100m/Z-37OnNZpS4.mp4</code></div>
+    </div><div class="card" data-source="howto100m" data-event_type="procedural-task" data-task_form="instructional-tutorial" data-temporal_scale="long" data-viewpoint="exocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="cooking howto100m ap8kna30ttu">
+      <div class="chead"><span class="sid">#37</span>
+        <span class="act">Cooking</span></div>
+      <video controls preload="none" playsinline src="videos/howto100m__ap8KnA30ttU.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">howto100m</span><span class="tag t-task">instructional-tutorial</span><span class="tag t-scale">long</span><span class="tag t-view">exocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> HowTo100M — Instructional tutorial clip<br>
+        <b>Original id:</b> <code>ap8KnA30ttU</code> · 286s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/howto100m_egoschema_temp_data/howto100m/ap8KnA30ttU.mp4</code></div>
+    </div><div class="card" data-source="howto100m" data-event_type="procedural-task" data-task_form="instructional-tutorial" data-temporal_scale="medium" data-viewpoint="exocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="diy &amp; home repair howto100m iluoswaved4">
+      <div class="chead"><span class="sid">#38</span>
+        <span class="act">DIY &amp; Home Repair</span></div>
+      <video controls preload="none" playsinline src="videos/howto100m__iluOswaVEd4.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">howto100m</span><span class="tag t-task">instructional-tutorial</span><span class="tag t-scale">medium</span><span class="tag t-view">exocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> HowTo100M — Instructional tutorial clip<br>
+        <b>Original id:</b> <code>iluOswaVEd4</code> · 234s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/howto100m_egoschema_temp_data/howto100m/iluOswaVEd4.mp4</code></div>
+    </div><div class="card" data-source="howto100m" data-event_type="instructional-demo" data-task_form="instructional-tutorial" data-temporal_scale="medium" data-viewpoint="exocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="education &amp; hobbies howto100m hn5bxetvqyi">
+      <div class="chead"><span class="sid">#39</span>
+        <span class="act">Education &amp; Hobbies</span></div>
+      <video controls preload="none" playsinline src="videos/howto100m__hn5BXeTVqYI.mp4"></video>
+      <div class="tags"><span class="tag t-event">instructional-demo</span><span class="tag t-source">howto100m</span><span class="tag t-task">instructional-tutorial</span><span class="tag t-scale">medium</span><span class="tag t-view">exocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> HowTo100M — Instructional tutorial clip<br>
+        <b>Original id:</b> <code>hn5BXeTVqYI</code> · 182s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/howto100m_egoschema_temp_data/howto100m/hn5BXeTVqYI.mp4</code></div>
+    </div><div class="card" data-source="howto100m" data-event_type="instructional-demo" data-task_form="instructional-tutorial" data-temporal_scale="medium" data-viewpoint="exocentric" data-environment="indoor/stationary" data-interaction="low/observational" data-text="food &amp; drink (non-cooking) howto100m s77te5xuja0">
+      <div class="chead"><span class="sid">#40</span>
+        <span class="act">Food &amp; Drink (non-cooking)</span></div>
+      <video controls preload="none" playsinline src="videos/howto100m__S77te5xuja0.mp4"></video>
+      <div class="tags"><span class="tag t-event">instructional-demo</span><span class="tag t-source">howto100m</span><span class="tag t-task">instructional-tutorial</span><span class="tag t-scale">medium</span><span class="tag t-view">exocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">low/observational</span></div>
+      <div class="prov"><b>Source:</b> HowTo100M — Instructional tutorial clip<br>
+        <b>Original id:</b> <code>S77te5xuja0</code> · 188s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/howto100m_egoschema_temp_data/howto100m/S77te5xuja0.mp4</code></div>
+    </div><div class="card" data-source="egoschema" data-event_type="procedural-task" data-task_form="unconstrained-egocentric" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="arts &amp; crafts egoschema 0293f655-83c1-40a2-886d-7ff2aa555ee2">
+      <div class="chead"><span class="sid">#41</span>
+        <span class="act">Arts &amp; Crafts</span></div>
+      <video controls preload="none" playsinline src="videos/egoschema__0293f655-83c1-40a2-886d-7ff2aa555ee2.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">egoschema</span><span class="tag t-task">unconstrained-egocentric</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> EgoSchema — Unconstrained egocentric 3-min clip<br>
+        <b>Original id:</b> <code>0293f655-83c1-40a2-886d-7ff2aa555ee2</code> · 180s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/howto100m_egoschema_temp_data/egoschema/0293f655-83c1-40a2-886d-7ff2aa555ee2.mp4</code></div>
+    </div><div class="card" data-source="egoschema" data-event_type="daily-routine" data-task_form="unconstrained-egocentric" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="cleaning &amp; chores egoschema 04d0e8d5-de94-4f28-b9c7-f58e3f83aea2">
+      <div class="chead"><span class="sid">#42</span>
+        <span class="act">Cleaning &amp; Chores</span></div>
+      <video controls preload="none" playsinline src="videos/egoschema__04d0e8d5-de94-4f28-b9c7-f58e3f83aea2.mp4"></video>
+      <div class="tags"><span class="tag t-event">daily-routine</span><span class="tag t-source">egoschema</span><span class="tag t-task">unconstrained-egocentric</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> EgoSchema — Unconstrained egocentric 3-min clip<br>
+        <b>Original id:</b> <code>04d0e8d5-de94-4f28-b9c7-f58e3f83aea2</code> · 180s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/howto100m_egoschema_temp_data/egoschema/04d0e8d5-de94-4f28-b9c7-f58e3f83aea2.mp4</code></div>
+    </div><div class="card" data-source="egoschema" data-event_type="procedural-task" data-task_form="unconstrained-egocentric" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="cooking egoschema 00594c2d-1c89-47ec-aa3f-1c560cab3d26">
+      <div class="chead"><span class="sid">#43</span>
+        <span class="act">Cooking</span></div>
+      <video controls preload="none" playsinline src="videos/egoschema__00594c2d-1c89-47ec-aa3f-1c560cab3d26.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">egoschema</span><span class="tag t-task">unconstrained-egocentric</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> EgoSchema — Unconstrained egocentric 3-min clip<br>
+        <b>Original id:</b> <code>00594c2d-1c89-47ec-aa3f-1c560cab3d26</code> · 180s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/howto100m_egoschema_temp_data/egoschema/00594c2d-1c89-47ec-aa3f-1c560cab3d26.mp4</code></div>
+    </div><div class="card" data-source="egoschema" data-event_type="procedural-task" data-task_form="unconstrained-egocentric" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="diy &amp; home repair egoschema 0461a8c2-dd83-4083-acc5-7c797f696d27">
+      <div class="chead"><span class="sid">#44</span>
+        <span class="act">DIY &amp; Home Repair</span></div>
+      <video controls preload="none" playsinline src="videos/egoschema__0461a8c2-dd83-4083-acc5-7c797f696d27.mp4"></video>
+      <div class="tags"><span class="tag t-event">procedural-task</span><span class="tag t-source">egoschema</span><span class="tag t-task">unconstrained-egocentric</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> EgoSchema — Unconstrained egocentric 3-min clip<br>
+        <b>Original id:</b> <code>0461a8c2-dd83-4083-acc5-7c797f696d27</code> · 180s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/howto100m_egoschema_temp_data/egoschema/0461a8c2-dd83-4083-acc5-7c797f696d27.mp4</code></div>
+    </div><div class="card" data-source="egoschema" data-event_type="instructional-demo" data-task_form="unconstrained-egocentric" data-temporal_scale="medium" data-viewpoint="egocentric" data-environment="indoor/stationary" data-interaction="high-manipulation" data-text="education &amp; hobbies egoschema 059f271d-c302-462d-bfad-2d7fee1c0c02">
+      <div class="chead"><span class="sid">#45</span>
+        <span class="act">Education &amp; Hobbies</span></div>
+      <video controls preload="none" playsinline src="videos/egoschema__059f271d-c302-462d-bfad-2d7fee1c0c02.mp4"></video>
+      <div class="tags"><span class="tag t-event">instructional-demo</span><span class="tag t-source">egoschema</span><span class="tag t-task">unconstrained-egocentric</span><span class="tag t-scale">medium</span><span class="tag t-view">egocentric</span><span class="tag t-env">indoor/stationary</span><span class="tag t-manip">high-manipulation</span></div>
+      <div class="prov"><b>Source:</b> EgoSchema — Unconstrained egocentric 3-min clip<br>
+        <b>Original id:</b> <code>059f271d-c302-462d-bfad-2d7fee1c0c02</code> · 180s<br>
+        <b>Path:</b> <code class="path">/gpfs/scrubbed/jxb1st/howto100m_egoschema_temp_data/egoschema/059f271d-c302-462d-bfad-2d7fee1c0c02.mp4</code></div>
+    </div></div>
+</div>
+<script>
+const active={};  // group -> Set of values
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{
+  const k=c.dataset.k,v=c.dataset.v; c.classList.toggle('on');
+  active[k]=active[k]||new Set(); active[k].has(v)?active[k].delete(v):active[k].add(v);
+  if(active[k].size===0) delete active[k]; apply();
+});
+const search=document.getElementById('search'); search.oninput=apply;
+function apply(){
+  const q=search.value.trim().toLowerCase();
+  let shown=0;
+  document.querySelectorAll('.card').forEach(card=>{
+    let ok=true;
+    for(const k in active){ if(!active[k].has(card.dataset[k])){ok=false;break;} }
+    if(ok&&q&&!card.dataset.text.includes(q)) ok=false;
+    card.style.display=ok?'':'none'; if(ok)shown++;
+  });
+  document.getElementById('count').textContent=shown+' / 46 videos shown';
+}
+apply();
+</script></body></html>
