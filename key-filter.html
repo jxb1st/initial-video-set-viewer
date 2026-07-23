@@ -39,6 +39,9 @@ th{color:var(--acc);position:sticky;top:0;background:var(--panel)}
 @media(max-width:820px){.vc2{grid-template-columns:1fr}.vleft{position:static}.vright{max-height:none}}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:14px} @media(max-width:900px){.two{grid-template-columns:1fr}}
 .warn{border-color:#f0b72f66}
+.pr{margin:6px 0;border:1px solid var(--line);border-radius:8px;background:#11161d}
+.pr summary{cursor:pointer;padding:8px 12px;color:var(--acc);font-size:12.5px;font-weight:600}
+.pr pre{margin:0;padding:12px;border-top:1px solid var(--line);white-space:pre-wrap;word-break:break-word;font:11.5px/1.5 ui-monospace,Menlo,Consolas,monospace;color:var(--fg);max-height:420px;overflow:auto}
 </style></head><body><div class="wrap">
 <h1>Video-Conditioned Persona Key Filtering</h1>
 <p class="sub">For every video × every persona key, a VLM applies the counterfactual test — <i>if two
@@ -57,6 +60,85 @@ persona, and never claims the real wearer has any attribute.</b></p>
 </div>
 <p class="mut" style="font-size:11.5px">VLM gemini-pro-latest (video understanding) · gemini-flash-latest (key filtering + reviewer) ·
 threshold ≥2 · prompt pkf_v1 · 2026-07-23T10:37:38</p>
+
+<h2>Exact prompts used</h2>
+<p class="sub">The verbatim prompts behind every decision (templates show <code>{...}</code> slots filled
+per video/key batch). Click to expand.</p>
+<div class="panel"><details class="pr"><summary>Stage A · Video understanding — system</summary><pre>You produce a compact, OBJECTIVE summary of an egocentric video for a
+downstream user-deviation data system. The camera wearer is the user.
+
+Describe only what is observable or reasonably inferable about the TASK. Do NOT introduce persona
+attributes (no personality, identity, goals-beyond-the-task, demographics). Do NOT describe the
+wearer&#x27;s appearance. Return valid JSON only.</pre></details><details class="pr"><summary>Stage A · Video understanding — user template</summary><pre>Summarize this egocentric video as JSON with these fields:
+- task: short task name
+- task_goal: the successful end state
+- observed_actions: list of {{action_id, description, time_range}}
+- objects_and_tools: list of strings
+- expected_or_inferred_steps: the reference/expected step sequence
+- decision_points: moments where the user must decide something
+- state_judgments: perceptual judgments the user must make (e.g. &quot;judge doneness&quot;)
+- hazards_and_constraints: safety / correctness constraints
+- possible_deviation_opportunities: list of {{opportunity_id (like &quot;d01&quot;), description, related_actions}}
+  — concrete places where a user could plausibly deviate from the expected trajectory
+- uncertainties: things not visible/known
+
+{context_block}
+
+Keep it factual. Do not invent persona attributes. Return ONLY the JSON object.</pre></details><details class="pr"><summary>Stage B · Key filtering — system</summary><pre>You are evaluating persona keys for a user-deviation data generation system.
+
+The input is an egocentric video (the camera wearer is the user), given to you as an objective task
+summary. Your task is NOT to infer the user&#x27;s actual persona. Your task is to decide whether each
+provided persona key could be a useful CONDITIONING DIMENSION for generating plausible deviations from
+the expected task trajectory in THIS particular video.
+
+A key may be useful even when its value is not visible. Select it only if different plausible VALUES of
+the key could cause meaningfully different deviation tendencies through a CONCRETE opportunity in the
+video.
+
+Do not assign values. Do not generate a persona. Do not generate deviations, dialogue, or questions.
+Do not infer sensitive attributes (health, disability, ethnicity, religion, nationality, age) from
+appearance — such keys may be selected only as hypothetical conditioning dimensions, never as claims
+about the real wearer. Evaluate EVERY provided key and return valid JSON only.</pre></details><details class="pr"><summary>Stage B · Key filtering — user template</summary><pre>VIDEO SUMMARY
+{video_summary_json}
+
+PERSONA KEYS TO EVALUATE (evaluate every one; use the exact key id)
+{key_batch_json}
+
+For each key:
+1. Apply the counterfactual test: if two otherwise similar users differed only in this key, could they
+   plausibly deviate from the expected task trajectory in meaningfully different ways in THIS video?
+2. Assign relevance_score 0-3:
+   0 = no credible connection to user deviation here
+   1 = weak/indirect; mainly narrative or dialogue, not deviation
+   2 = plausible, video-specific connection to at least one deviation opportunity
+   3 = strong connection to multiple or high-impact deviation opportunities
+3. selected = (relevance_score &gt;= 2).
+4. Give a concise VIDEO-SPECIFIC causal reason.
+5. related_opportunity_ids: link selected keys to opportunity ids from the summary.
+6. reason_codes for SELECTED keys (&gt;=1), from: STEP_OMISSION, ACTION_SELECTION, ACTION_ORDER,
+   OBJECT_OR_TOOL_SELECTION, QUANTITY_OR_PARAMETER_CHOICE, TIMING_OR_PACING, STATE_JUDGMENT,
+   ATTENTION_OR_MONITORING, ERROR_RECOVERY, HELP_SEEKING, RISK_OR_SAFETY, GOAL_PRIORITY,
+   DEPENDENT_OR_OTHER_PERSON_NEEDS, HEALTH_OR_ACCESSIBILITY_ADAPTATION, TASK_PERSISTENCE_OR_ABANDONMENT.
+7. rejection_code for NON-selected keys, one of: NO_VIDEO_OPPORTUNITY, DIALOGUE_ONLY, NARRATIVE_ONLY,
+   REDUNDANT_WITH_MORE_DIRECT_KEY, TOO_INDIRECT, STEREOTYPE_DEPENDENT, CONTRADICTS_VIDEO,
+   INSUFFICIENT_CAUSAL_MECHANISM.
+
+Do not assign any persona value. Do not claim the actual wearer has the attribute.
+Return one decision for EVERY supplied key. Return ONLY the JSON object.</pre></details><details class="pr"><summary>Reviewer pass — system</summary><pre>You are a strict reviewer of persona-key selections for user-deviation generation.
+You remove keys with weak causal links, resolve redundancy, and check that every reason is
+video-specific and that sensitive keys are framed as hypothetical conditioning dimensions (never
+appearance-based inference). You must NOT add values or generate deviations. Return valid JSON only.</pre></details><details class="pr"><summary>Reviewer pass — user template</summary><pre>VIDEO SUMMARY
+{video_summary_json}
+
+INITIALLY SELECTED KEYS (with scores and reasons)
+{selected_json}
+
+For each key decide keep=true/false:
+- remove if the causal link to a concrete deviation opportunity is weak or not video-specific;
+- remove if it is redundant with a more direct selected key (say which in note);
+- remove if a sensitive key is justified by appearance/stereotype rather than a task mechanism;
+- keep keys that introduce a DISTINCT deviation mechanism.
+Give a one-line note per key. Return ONLY JSON: {{&quot;reviews&quot;:[{{&quot;key&quot;,&quot;keep&quot;,&quot;note&quot;}}]}}.</pre></details></div>
 
 <h2>Which keys matter for deviation? (selection rate across 46 videos)</h2>
 <p class="sub">Selection rate = fraction of videos where the key was chosen. 🔒 = sensitive key (selected
